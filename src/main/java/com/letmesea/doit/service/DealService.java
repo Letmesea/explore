@@ -21,6 +21,7 @@ public class DealService {
     private static final Logger logger = Logger.getLogger(DealService.class);
     /**每期数据*/
     private static final String urlStr = "http://kaijiang.zhcw.com/zhcw/html/ssq/list_1.html";
+    private static final String drt = "http://kaijiang.zhcw.com/zhcw/inc/ssq/ssq_wqhg.jsp?pageNum=110";
     /**详情*/
     private static final String urlDetailStr = "https://kaijiang.500.com/shtml/ssq/21047.shtml";
     @Autowired
@@ -32,8 +33,21 @@ public class DealService {
         List<Kj> kjs = new ArrayList<>();
         try {
             for (int i=1;i<=135;i++){
-                String url = "http://kaijiang.zhcw.com/zhcw/html/ssq/list_"+i+".html";
-                Document document = Jsoup.connect(url).ignoreContentType(true).timeout(30000).get();
+                Document document = null;
+                String url = "http://kaijiang.zhcw.com/zhcw/inc/ssq/ssq_wqhg.jsp?pageNum="+i;
+                try{
+                    document = Jsoup.connect(url).ignoreContentType(true).timeout(30000).get();
+                }catch (Exception e){
+                    logger.error("第"+i+"页获取异常,正在重试...");
+                    for (;;){
+                        try {
+                            document = Jsoup.connect(url).ignoreContentType(true).timeout(30000).get();
+                            if (document!=null)break;
+                        }catch (Exception e1){
+                            logger.error("第"+i+"页重试失败，继续重试...");
+                        }
+                    }
+                }
                 Elements elements = document.body().select("tr").select("td");
                 List<String> every = elements.eachText();
                 Kj kj = new Kj();
@@ -43,10 +57,30 @@ public class DealService {
                     } else if (StringUtils.isEmpty(kj.getNumber())){
                         String n = every.get(j).substring(2);
                         kj.setNumber(n);
+                        Document documentd = null;
                         String urld = "https://kaijiang.500.com/shtml/ssq/"+n+".shtml";
-                        Document documentd = Jsoup.connect(urld).ignoreContentType(true).timeout(30000).get();
-                        String sq = documentd.body().select("tr").select("td").eachText().get(12);
-                        kj.setSqNumber(sq);
+                        try {
+                            documentd = Jsoup.connect(urld).ignoreContentType(true).timeout(30000).get();
+                        }catch (Exception e){
+                            logger.error("第"+n+"期出球顺序获取异常，正在重试...");
+                            for (;;){
+                                try{
+                                    documentd = Jsoup.connect(urld).ignoreContentType(true).timeout(30000).get();
+                                    if (documentd!=null)break;
+                                }catch (Exception e1){
+                                    logger.error("第"+n+"期出球顺序重试失败，继续重试...");
+                                }
+                            }
+                        }
+                        List<String> bq = documentd.body().select("tr").select("td").eachText();
+                        if (bq.contains("出球顺序：")){
+                            int idx = bq.indexOf("出球顺序：")+1;
+                            if(idx<bq.size()){
+                                String sq = bq.get(12);
+                                logger.info("第"+n+"期顺序："+sq);
+                                kj.setSqNumber(sq);
+                            }
+                        }
                     }else if (StringUtils.isEmpty(kj.getWinNumber())){
                         kj.setWinNumber(every.get(j));
                     }else if (StringUtils.isEmpty(kj.getTotalAmount())){
@@ -61,13 +95,6 @@ public class DealService {
                         kj=new Kj();
                     }
                 }
-
-//                if (document!=null&& document.body()!=null
-//                        &&document.body().select("tr")!=null
-//                        &&document.body().select("tr").select("td")!=null){
-//                    //顺序
-//                    String [] sq = document.body().select("tr").select("td").eachText().get(12).split(" ");
-//                }
             }
             System.out.println(111);
         } catch (Exception e) {

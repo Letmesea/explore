@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.letmesea.doit.dao.dealDao">
-
+<mapper namespace="com.letmesea.doit.dao.DealDao">
+    <select id="getData" resultType="com.letmesea.doit.pojo.Kj">
+        select * from t_ssq;
+    </select>
+    <insert id="batchInsertSsq" parameterType="java.util.List">
+        <selectKey resultType ="java.lang.Integer" keyProperty= "number"
+             order= "AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey >
+        insert into t_ssq(number,win_number,sq_number,open_dtm,create_dtm,update_dtm,first_prize_num,total_amount,second_prize_num)
+        values
+        <foreach collection ="list" item="ssq" index= "index" separator =",">
+              (
+              #{ssq.number}, #{ssq.winNumber},
+              #{ssq.sqNumber},
+              #{ssq.openDtm},
+              now(), now(),#{ssq.firstPrizeNum},#{ssq.totalAmount},#{ssq.secondPrizeNum}
+              )
+        </foreach >
+    </insert>
 </mapper>

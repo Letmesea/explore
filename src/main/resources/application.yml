@@ -25,3 +25,4 @@ spring:
         test-on-return: false
         pool-prepared-statements: true
         max-pool-prepared-statement-per-connection-size: 20
+

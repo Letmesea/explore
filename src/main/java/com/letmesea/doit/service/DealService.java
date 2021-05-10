@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DealService {
@@ -32,6 +34,7 @@ public class DealService {
     @Autowired
     private DealDao dealDao;
     public List<Kj> getData(){
+        List<Kj> list = dealDao.getData();
         return dealDao.getData();
     }
     public Integer batchInsert(){
@@ -131,7 +134,7 @@ public class DealService {
                 kj.setFirstPrizeNum(ssq.getFstNum());
                 kj.setSecondPrizeNum(ssq.getSecNum());
                 String winNumber = ssq.getFst()+" "+ssq.getSec()+" "+
-                        ssq.getThrd()+" "+ssq.getFive()+" "+ssq.getSix()+" "+ssq.getSeven();
+                        ssq.getThrd()+" "+ssq.getFour()+" "+ssq.getFive()+" "+ssq.getSix()+" "+ssq.getSeven();
                 kj.setWinNumber(winNumber);
                 kj.setTotalAmount(ssq.getTotalA());
                 kjs.add(kj);

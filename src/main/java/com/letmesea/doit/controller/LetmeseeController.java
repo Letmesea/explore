@@ -19,6 +19,10 @@ public class LetmeseeController {
     public List<Kj> getSsq(){
         return dealService.getData();
     }
+    @GetMapping(value = "/ssqr")
+    public List<Kj> getSsqr(){
+        return dealService.getData();
+    }
     @GetMapping(value = "/issq")
     public Integer insertSsq(){
         return dealService.batchInsert();

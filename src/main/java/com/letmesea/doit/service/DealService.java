@@ -1,7 +1,11 @@
 package com.letmesea.doit.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.letmesea.doit.dao.DealDao;
+import com.letmesea.doit.dto.Ssq;
 import com.letmesea.doit.pojo.Kj;
+import com.letmesea.doit.utils.FileUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -9,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -32,7 +37,7 @@ public class DealService {
     public Integer batchInsert(){
         List<Kj> kjs = new ArrayList<>();
         try {
-            for (int i=1;i<=135;i++){
+            for (int i=1;i<=1;i++){
                 Document document = null;
                 String url = "http://kaijiang.zhcw.com/zhcw/inc/ssq/ssq_wqhg.jsp?pageNum="+i;
                 try{
@@ -92,13 +97,58 @@ public class DealService {
                     }
                     if (j%6==5){
                         kjs.add(kj);
-                        kj=new Kj();
+                        break;
                     }
                 }
             }
             System.out.println(111);
         } catch (Exception e) {
             logger.error("{}",e);
+        }
+        try {
+            return dealDao.batchInsertSsq(kjs);
+        }catch (Exception e){
+            logger.error("异常入参："+JSONObject.toJSONString(kjs));
+            logger.error("插入异常,{}",e);
+            return null;
+        }
+    }
+    public Integer batchInsertFromFile(){
+        String filePath = this.getClass().getResource("/").getPath()+"data/03001-21049-detail.json";
+        String filePath1 = this.getClass().getResource("/").getPath()+"data/03001-21049-sq.json";
+        String res = FileUtil.readFile(filePath);
+        String res1 = FileUtil.readFile(filePath1);
+
+        List<Ssq> ssqs = JSONArray.parseArray(res,Ssq.class);
+        List<Ssq> ssqs1 = JSONArray.parseArray(res1,Ssq.class);
+        List<Kj> kjs = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(ssqs))
+        {
+            for (Ssq ssq:ssqs){
+                Kj kj = new Kj();
+                kj.setNumber(ssq.getQi());
+                kj.setOpenDtm(ssq.getOpenDate());
+                kj.setFirstPrizeNum(ssq.getFstNum());
+                kj.setSecondPrizeNum(ssq.getSecNum());
+                String winNumber = ssq.getFst()+" "+ssq.getSec()+" "+
+                        ssq.getThrd()+" "+ssq.getFive()+" "+ssq.getSix()+" "+ssq.getSeven();
+                kj.setWinNumber(winNumber);
+                kj.setTotalAmount(ssq.getTotalA());
+                kjs.add(kj);
+            }
+        }
+        if (!CollectionUtils.isEmpty(ssqs1)){
+            for (Ssq ssq:ssqs1){
+                for (Kj kj :kjs){
+                    if (kj.getNumber().equals(ssq.getQi())){
+                        String sq = ssq.getSqFst()+" "+ssq.getSqSec()+" "+
+                                ssq.getSqThrd()+" "+ssq.getSqFour()+" "+
+                                ssq.getSqFive()+" "+ssq.getSqSix();
+                        kj.setSqNumber(sq);
+                        break;
+                    }
+                }
+            }
         }
         return dealDao.batchInsertSsq(kjs);
     }

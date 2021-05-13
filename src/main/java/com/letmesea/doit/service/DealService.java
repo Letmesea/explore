@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.letmesea.doit.dao.DealDao;
 import com.letmesea.doit.dto.Ssq;
+import com.letmesea.doit.dto.WinHistory;
 import com.letmesea.doit.pojo.Kj;
 import com.letmesea.doit.utils.FileUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -34,9 +35,9 @@ public class DealService {
     @Autowired
     private DealDao dealDao;
     public List<Kj> getData(){
-        List<Kj> list = dealDao.getData();
         return dealDao.getData();
     }
+
     public Integer batchInsert(){
         List<Kj> kjs = new ArrayList<>();
         try {

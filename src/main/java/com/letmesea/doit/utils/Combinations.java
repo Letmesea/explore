@@ -1,9 +1,13 @@
 package com.letmesea.doit.utils;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Permutation {
+public class Combinations {
     public static List<int[]> nchoosek(int[] array, int k){
         int n = array.length;
         if(n > 31){
@@ -59,5 +63,13 @@ public class Permutation {
             }
         }
         return cnk;
+    }
+
+    public static void main(String[] args) {
+        int[] req={1,2,5,7,9,11,15,16,18,19,23,24,26,29,30,32,33};
+        List<int[]> res = nchoosek(req,6);
+        for (int[] a:res){
+            System.out.println(JSON.toJSONString(Arrays.asList(a)) );
+        }
     }
 }

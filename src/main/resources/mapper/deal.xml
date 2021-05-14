@@ -20,4 +20,18 @@
               )
         </foreach >
     </insert>
+    <insert id="batchInsertSsqAll" parameterType="java.util.List">
+        <selectKey resultType ="java.lang.Integer" keyProperty= "number"
+                   order= "AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey >
+        insert into t_ssq_all(number,create_dtm,update_dtm)
+        values
+        <foreach collection ="list" item="ssq" index= "index" separator =",">
+            (
+            #{ssq},
+            now(), now()
+            )
+        </foreach >
+    </insert>
 </mapper>

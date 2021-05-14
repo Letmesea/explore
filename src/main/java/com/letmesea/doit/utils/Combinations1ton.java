@@ -3,6 +3,7 @@ package com.letmesea.doit.utils;
 import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -42,8 +43,25 @@ public class Combinations1ton {
     public static void main(String[] args) {
         List<List<Integer>> res = combine(33,6);
         System.out.println(res.size()*16); ;
-        for (List<Integer> list:res){
-            System.out.println(JSON.toJSONString(list));
+        LinkedList<String> all = new LinkedList<>();
+        for (int i=1;i<=16;i++){
+            for (List<Integer> re : res) {
+                re.add(i);
+                String tstr = "";
+                for (int j:re){
+                    if (j<10){
+                        tstr=tstr+"0"+j+" ";
+                    }else{
+                        tstr+=j+" ";
+                    }
+                }
+                all.add(tstr.trim());
+                if (all.size()==400000){
+                    all = new LinkedList<>();
+                }
+            }
         }
+
+        System.out.println(all.size()); ;
     }
 }

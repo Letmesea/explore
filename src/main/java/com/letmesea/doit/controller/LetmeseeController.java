@@ -26,7 +26,10 @@ public class LetmeseeController {
     public Integer insertSsq(){
         return dealService.batchInsert();
     }
-
+    @GetMapping(value = "/ssqAll")
+    public void insertSsqAll(){
+         dealService.ssqAllNumber();
+    }
     @GetMapping("/dlt")
     public void getDlt(){
 

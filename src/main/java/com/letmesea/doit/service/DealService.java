@@ -6,6 +6,7 @@ import com.letmesea.doit.dao.DealDao;
 import com.letmesea.doit.dto.Ssq;
 import com.letmesea.doit.dto.WinHistory;
 import com.letmesea.doit.pojo.Kj;
+import com.letmesea.doit.utils.Combinations1ton;
 import com.letmesea.doit.utils.FileUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -19,10 +20,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DealService {
@@ -157,4 +155,30 @@ public class DealService {
         return dealDao.batchInsertSsq(kjs);
     }
 
+    /**
+     * 1107568*16=17721088种可能落库
+     */
+    public void ssqAllNumber(){
+        List<List<Integer>> res = Combinations1ton.combine(33,6);
+        LinkedList<String> all = new LinkedList<>();
+        for (int i=1;i<=16;i++){
+            for (List<Integer> re : res) {
+                re.add(i);
+                String tstr = "";
+                for (int j:re){
+                    if (j<10){
+                        tstr=tstr+"0"+j+" ";
+                    }else{
+                        tstr+=j+" ";
+                    }
+                }
+                all.add(tstr.trim());
+                if (all.size()==10000){
+                    dealDao.batchInsertSsqAll(all);
+                    all = new LinkedList<>();
+                }
+            }
+        }
+        System.out.println(all.size());
+    }
 }

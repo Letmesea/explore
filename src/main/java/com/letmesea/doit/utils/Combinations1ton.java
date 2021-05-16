@@ -41,27 +41,26 @@ public class Combinations1ton {
     }
 
     public static void main(String[] args) {
-        List<List<Integer>> res = combine(33,6);
-        System.out.println(res.size()*16); ;
+        List<List<Integer>> res = combine(33, 6);
+        System.out.println(res.size() * 16);
+        ;
         LinkedList<String> all = new LinkedList<>();
-        for (int i=1;i<=16;i++){
-            for (List<Integer> re : res) {
-                re.add(i);
-                String tstr = "";
-                for (int j:re){
-                    if (j<10){
-                        tstr=tstr+"0"+j+" ";
-                    }else{
-                        tstr+=j+" ";
-                    }
+        for (List<Integer> re : res) {
+            String tstr = "";
+            for (int j : re) {
+                if (j < 10) {
+                    tstr = tstr + "0" + j + " ";
+                } else {
+                    tstr += j + " ";
                 }
-                all.add(tstr.trim());
-                if (all.size()==400000){
-                    all = new LinkedList<>();
-                }
+            }
+            all.add(tstr.trim());
+            if (all.size() == 400000) {
+                all = new LinkedList<>();
             }
         }
 
-        System.out.println(all.size()); ;
+        System.out.println(all.size());
+        ;
     }
 }

@@ -12,7 +12,9 @@ import java.util.List;
  */
 @Repository
 public interface DealDao {
-    List<Kj> getData();
+    List<String> getData();
+    List<String> getKjData(Integer qi);
+    List<String> getSsqAllData();
     Integer batchInsertSsq(List<Kj> kjs);
     Integer batchInsertSsqAll(LinkedList<String> req);
 }

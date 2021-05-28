@@ -36,9 +36,41 @@ public class DealService {
     private static final String urlDetailStr = "https://kaijiang.500.com/shtml/ssq/21047.shtml";
     @Autowired
     private DealDao dealDao;
-
-    public List<Kj> getData() {
-        return dealDao.getData();
+    public List<String> get100(Integer qi){
+        return dealDao.getKjData(qi);
+    }
+    /**
+     *
+     */
+    public List<String> getData() {
+        List<String> kjs = dealDao.getData();
+        List<String> all = dealDao.getSsqAllData();
+        List<String> res = new ArrayList<>();
+        for (int i=0;i<all.size();i++){
+            String[] req = all.get(i).split(" ");
+            for (int j=0;j<kjs.size();j++){
+                String[] rep = kjs.get(j).split(" ");
+                //judge win
+                if (judgeCondition(rep,req)){
+                    res.add(all.get(i));
+                }
+            }
+        }
+        return res;
+    }
+    boolean judgeCondition(String[] s1,String[] s2){
+        int cnt=0;
+        for (String r1:s1){//kai
+            for (String r2:s2){//cai
+                if (r1.equals(r2)){
+                    cnt++;break;
+                }
+            }
+        }
+        if (cnt==0||cnt==1||cnt==2||cnt==3||cnt==4){
+            return true;
+        }
+        return false;
     }
 
     public Integer batchInsert() {

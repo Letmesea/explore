@@ -1,8 +1,11 @@
 package com.letmesea.doit.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.letmesea.doit.dto.A;
 import com.letmesea.doit.dto.WinHistory;
 import com.letmesea.doit.pojo.Kj;
 import com.letmesea.doit.service.DealService;
+import com.letmesea.doit.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,8 @@ import java.util.Map;
 public class LetmeseeController {
     @Autowired
     private DealService dealService;
+    @Autowired
+    RedisUtils redisUtils;
     @GetMapping(value = "/ssq")
     public List<String> getSsq(){
         return dealService.getData();
@@ -42,5 +47,12 @@ public class LetmeseeController {
     public String test(){
         return "test";
     }
-
+    @GetMapping("/redis")
+    @ResponseBody
+    public void redisTest(){
+        A a = new A();
+        a.setAir("qq");
+        redisUtils.set("12", JSON.toJSONString(a));
+        com.letmesea.doit.dto.entity.A a1 = JSON.parseObject((String)redisUtils.get("12") , com.letmesea.doit.dto.entity.A.class);
+    }
 }

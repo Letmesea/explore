@@ -1,7 +1,5 @@
 package com.letmesea.doit.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.letmesea.doit.dto.A;
 import com.letmesea.doit.service.DealService;
 import com.letmesea.doit.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +44,5 @@ public class LetmeseeController {
     public String test(){
         return "test";
     }
-    @GetMapping("/redis")
-    @ResponseBody
-    public void redisTest(){
-        A a = new A();
-        a.setAir("qq");
-        redisUtils.set("12", JSON.toJSONString(a));
-        com.letmesea.doit.dto.entity.A a1 = JSON.parseObject((String)redisUtils.get("12") , com.letmesea.doit.dto.entity.A.class);
-    }
+
 }

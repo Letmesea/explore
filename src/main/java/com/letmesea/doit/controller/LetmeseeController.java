@@ -1,8 +1,9 @@
 package com.letmesea.doit.controller;
 
+import com.letmesea.doit.config.DruidConfig;
 import com.letmesea.doit.service.DealService;
 import com.letmesea.doit.utils.RedisUtils;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/see")
-@Slf4j
 public class LetmeseeController {
     private static Logger logger = Logger.getLogger(LetmeseeController.class);
     @Autowired
@@ -47,10 +47,11 @@ public class LetmeseeController {
     public void getDlt(){
 
     }
-
+    @ResponseBody
     @GetMapping("/test")
     public String test(){
-        logger.info("端口"+port);
+        logger.info(1111);
+        System.out.println(port);
         return "test";
     }
     @GetMapping("/testlb")

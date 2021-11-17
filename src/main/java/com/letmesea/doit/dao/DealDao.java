@@ -1,10 +1,8 @@
 package com.letmesea.doit.dao;
 
-import com.letmesea.doit.pojo.Kj;
-import org.apache.ibatis.annotations.Mapper;
+import com.letmesea.doit.dto.CityDto;
 import org.springframework.stereotype.Repository;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,9 +10,6 @@ import java.util.List;
  */
 @Repository
 public interface DealDao {
-    List<String> getData();
-    List<String> getKjData(Integer qi);
-    List<String> getSsqAllData();
-    Integer batchInsertSsq(List<Kj> kjs);
-    Integer batchInsertSsqAll(LinkedList<String> req);
+    List<CityDto> getData();
+    Integer batchInsertSsq(List<CityDto> kjs);
 }

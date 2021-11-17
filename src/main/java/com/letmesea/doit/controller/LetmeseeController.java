@@ -1,6 +1,7 @@
 package com.letmesea.doit.controller;
 
 import com.letmesea.doit.config.DruidConfig;
+import com.letmesea.doit.dto.ProvinceData;
 import com.letmesea.doit.service.DealService;
 import com.letmesea.doit.utils.RedisUtils;
 
@@ -26,39 +27,23 @@ public class LetmeseeController {
 
     @Autowired
     RedisUtils redisUtils;
-    @GetMapping(value = "/ssq")
-    public List<String> getSsq(){
-        return dealService.getData();
-    }
-    @ResponseBody
-    @GetMapping(value = "/ssq/{qi}")
-    public List<String> getSsqn(@PathVariable("qi") Integer qi){
-        return dealService.get100(qi);
-    }
-    @GetMapping(value = "/issq")
-    public Integer insertSsq(){
-        return dealService.batchInsert();
-    }
-    @GetMapping(value = "/ssqAll")
-    public void insertSsqAll(){
-         dealService.ssqAllNumber();
-    }
-    @GetMapping("/dlt")
-    public void getDlt(){
 
-    }
-    @ResponseBody
+
+
+
+
+
     @GetMapping("/test")
     public String test(){
         logger.info(1111);
         System.out.println(port);
-        return "test";
+        return "index";
     }
-    @GetMapping("/testlb")
+
     @ResponseBody
-    public String testlb(){
-        logger.info("端口"+port);
-        return port;
+    @GetMapping(value = "/loadData")
+    public List<ProvinceData> getSsqn(){
+        return dealService.getProvinData();
     }
 
 }

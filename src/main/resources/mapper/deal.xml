@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.letmesea.doit.dao.DealDao">
-    <select id="getData" resultType="java.lang.String">
-        select left(win_number,17) from t_ssq order by open_dtm desc ;
-    </select>
-    <select id="getKjData" parameterType="integer" resultType="java.lang.String">
-        select win_number from t_ssq order by open_dtm desc limit #{item};
-    </select>
-    <select id="getSsqAllData" resultType="java.lang.String">
-        select tsa.number from t_ssq_all tsa;
+    <resultMap id="BageSalesSummaryMap" type="com.letmesea.doit.dto.CityDto">
+        <result column="areaName" property="areaName" />
+        <result column="cityId" property="cityId" />
+        <result column="areaType" property="areaType" />
+        <result column="areaNm_1" property="areaNm1" />
+        <result column="areaNm_2" property="areaNm2" />
+        <result column="areaNm_3" property="areaNm3" />
+        <result column="mk" property="mk" />
+        <result column="upddate" property="upddate" />
+        <result column="remark" property="remark" />
+        <result column="weaId" property="weaId" />
+    </resultMap>
+    <select id="getData" resultMap="BageSalesSummaryMap">
+        select * from t_city;
     </select>
     <insert id="batchInsertSsq" parameterType="java.util.List">
         <selectKey resultType ="java.lang.Integer" keyProperty= "number"
              order= "AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey >
-        insert into t_ssq(number,win_number,sq_number,open_dtm,create_dtm,update_dtm,first_prize_num,total_amount,second_prize_num)
+        insert into t_city(areaName,cityId,areaType,areaNm_1,areaNm_2,areaNm_3,mk,upddate,remark,weaId)
         values
         <foreach collection ="list" item="ssq" index= "index" separator =",">
               (
-              #{ssq.number}, #{ssq.winNumber},
-              #{ssq.sqNumber},
-              #{ssq.openDtm},
-              now(), now(),#{ssq.firstPrizeNum},#{ssq.totalAmount},#{ssq.secondPrizeNum}
+              #{ssq.areaName},
+               #{ssq.cityId},
+              #{ssq.areaType},
+              #{ssq.areaNm_1},
+              #{ssq.areaNm_2},
+              #{ssq.areaNm_3},
+              #{ssq.mk},
+              #{ssq.upddate},
+              #{ssq.remark},
+              #{ssq.weaId}
               )
         </foreach >
     </insert>
-    <insert id="batchInsertSsqAll" parameterType="java.util.List">
-        <selectKey resultType ="java.lang.Integer" keyProperty= "number"
-                   order= "AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey >
-        insert into t_ssq_all(number,create_dtm,update_dtm)
-        values
-        <foreach collection ="list" item="ssq" index= "index" separator =",">
-            (
-            #{ssq},
-            now(), now()
-            )
-        </foreach >
-    </insert>
+
 </mapper>

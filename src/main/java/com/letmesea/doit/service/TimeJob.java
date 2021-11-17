@@ -19,10 +19,11 @@ public class TimeJob {
         this.dealService = dealService;
     }
 
-    @Scheduled(cron = "0 0 22 ? * TUE,THU,SUN")
+    @Scheduled(cron = "0 */1 * * * ?")
     private void ssq(){
         log.info("定时任务执行...");
-        dealService.batchInsert();
+        dealService.refresh();
+//        dealService.batchInsert();
     }
     @Scheduled(cron = "0 0 21 ? * MON,WED,SAT")
     private void dlt(){
